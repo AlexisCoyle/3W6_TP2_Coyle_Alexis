@@ -2,8 +2,41 @@
 
 <script>
     // TODO: Ajouter la méthode highlightByName()
-
+    function highlightByName()
+    {
+        let nomTrainers = document.getElementsByClassName("nomTrainer");
+        let string = document.getElementById("inputHighlight").value;
+        for(let i=0; i < nomTrainers.length; i++)
+        {
+            let text = nomTrainers[i].textContent.toUpperCase();
+            if(text.includes(string.toUpperCase()))
+            {
+                nomTrainers[i].parentNode.style.backgroundColor = "yellow";
+            }
+            else
+            {
+                nomTrainers[i].parentNode.style.backgroundColor = "white";
+            }
+        }
+    }
     // TODO: Ajouter la méthode filterByDate()
+    function filterByDate()
+    {
+        let dateTrainer = document.getElementsByClassName("dateTrainer");
+        let dateFilter = document.getElementById("date").valueAsDate;
+        for(let i=0; i < dateTrainer.length; i++)
+        {
+            let date = new Date(dateTrainer[i].textContent)
+            if(date >= dateFilter)
+            {
+                dateTrainer[i].parentNode.style.display = "";
+            }
+            else
+            {
+                dateTrainer[i].parentNode.style.display = "none";
+            }
+        }
+    }
 </script>
 
 @{
@@ -17,10 +50,10 @@
 </p>
 
 <h4>@Locals["HighlightByName"]</h4>
-<input type="text" oninput="highlightByName()" />
+<input type="text" oninput="highlightByName()" id="inputHighlight" />
 
 <h4>@Locals["FilterByDate"]</h4>
-<input type="date" />
+<input type="date" id="date" />
 <button onclick="filterByDate()" class="btn btn-primary">@Locals["Filter"]</button>
 
 <table class="table">
@@ -41,7 +74,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="nomTrainer"> 
                  <a asp-action="Filter" asp-controller="Trainer" asp-route-SearchNameText="@item.Trainer.FullName">
                     @Html.DisplayFor(modelItem => item.Trainer.FullName)
                 </a>
@@ -49,7 +82,7 @@
             <td>
                 <a asp-action="Details" asp-controller="Certification" asp-route-id="@item.Certification_Id">   @Html.DisplayFor(modelItem => item.Certification.FullTitle) </a>
             </td>
-            <td>
+            <td class="dateTrainer">
                 @item.DateCertification.ToShortDateString()
             </td>
             <td>
